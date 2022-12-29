@@ -1,53 +1,28 @@
-document.addEventListener("DOMContentLoaded", e => {
-    let scrollContainer = document.getElementById('scrollContainer');
-    let usersTbody = document.getElementById('usersTbody');
+document.addEventListener('DOMContentLoaded', function () {
+    const elements = [...Array(10000).keys()];
+    const rowHeight = 30;
+    const containerHeight = 300;
+    const totalItems = containerHeight / rowHeight;
+    const containerElement = document.getElementById('container');
+    const viewportHeight = rowHeight * elements.length;
+    const viewportElement = document.getElementById('viewport');
+    const rowsElement = document.getElementById('rows');
 
-    loadData().then(response => {
-        response.results.forEach(item => {
-            let html = `
-            <tr>
-            <td><img src="${item.picture.thumbnail}"></td>
-            <td>${item.name.first + ' ' + item.name.last}</td>
-            <td>${item.gender}</td>
-            <td>${item.email}</td>
-            <td>${item.phone}</td>
-            <td>${item.cell}</td>
-            </tr>`;
-            usersTbody.innerHTML += html;
-        });
+    viewportElement.style.height = `${viewportHeight}px`;
+    containerElement.style.height = `${containerHeight}px`;
+
+    renderNodes(0);
+
+    containerElement.addEventListener('scroll', e => {
+        e.preventDefault();
+        const start = Math.floor(e.target.scrollTop / rowHeight);
+        renderNodes(start);
     });
 
-    scrollContainer.addEventListener('scroll', e => {
-        const offsetHeight = e.target.offsetHeight;
-        const scrollTop = e.target.scrollTop;
-        const scrollHeight = e.target.scrollHeight;
-
-        if (offsetHeight + scrollTop + 1 >= scrollHeight) {
-            loadData().then(response => {
-                response.results.forEach(item => {
-                    let html = `
-                    <tr>
-                    <td><img src="${item.picture.thumbnail}"></td>
-                    <td>${item.name.first + ' ' + item.name.last}</td>
-                    <td>${item.gender}</td>
-                    <td>${item.email}</td>
-                    <td>${item.phone}</td>
-                    <td>${item.cell}</td>
-                    </tr>`;
-                    usersTbody.innerHTML += html;
-                });
-            });
-        }
-    })
-});
-
-async function loadData() {
-    try {
-        const response = await fetch('https://randomuser.me/api/?results=5&inc=gender,name,nat,email,phone,cell,registered,picture,city,state,country,street', {
-            method: 'GET'
-        });
-        return await response.json();
-    } catch (error) {
-        return error;
+    function renderNodes(start) {
+        const array = [];
+        for(let i = start; i < (start + totalItems) && i < elements.length; i++)
+            array.push(`<div class="row" style="height:${rowHeight - 2}px">Row Index #${i}</div>`);
+        rowsElement.innerHTML = array.join('');
     }
-}
+});
