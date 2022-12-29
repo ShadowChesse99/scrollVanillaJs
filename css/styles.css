@@ -4,13 +4,12 @@
 }
 
 .viewport {
-    overflow: hide;
+    overflow: hidden;
+    will-change: transform;
+    position: relative;
 }
 
 .rows {
-    position: absolute;
-    z-index: -1;
-    width: 98.1%;
     will-change: transform;
 }
 
