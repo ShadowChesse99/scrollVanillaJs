@@ -1,0 +1,19 @@
+.table-container {
+    border: 1px solid #03071e;
+    overflow: auto;
+}
+
+.table-viewport {
+    overflow: hidden;
+}
+
+.table-rows {
+    will-change: transform;
+}
+
+.row {
+    background-color: #48cae4;
+    border: 1px solid #023e8a;
+    color: #212529;
+    position: relative;
+}
